@@ -1,0 +1,39 @@
+#residual energy of node
+BEGIN {
+	i=0
+	n=0
+	total_energy=0.0
+	energy_avail[s] = initenergy;
+}
+
+{
+event = $1
+time =$2
+node_id=$5
+energy_value= $7
+packet=$8
+pkt_id=$6
+
+
+if(event == "N"){
+	for(i=0;i<50;i++) {
+		if(i==node_id) {
+			energy_avail[i] = energy_avail[i]-(energy_avail[i] - energy_value);
+#			printf("%d-%f \n",i,energy_avail[i]);
+		}
+	}
+}
+}
+
+END {
+for(i=0;i<50;i++) {
+	#printf(" Residual Energy of node %d  is %f \n",i,energy_avail[i]);
+	printf("%d %f \n",i,energy_avail[i]);
+total_energy = total_energy + energy_avail[i];
+if(energy_avail[i] !=0)
+n++
+}
+printf("the total Residual energy of the network is %f \n",total_energy);
+printf("\n");
+}
+
